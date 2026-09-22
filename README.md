@@ -1,92 +1,151 @@
 # claude-code-agreement
 
-A global `CLAUDE.md` "working agreement" for [Claude Code](https://claude.com/claude-code),
-plus three small hooks that make parts of it self-enforcing:
+> **A hyper-lean operating protocol for human–AI software delivery.**  
+> *Turn AI pair programming from chaotic diff-checking into disciplined, reality-verified product delivery.*
 
-- **Cost tracking** that writes itself — no one ever reports a dollar figure by hand.
-- **Context handoff** — near the end of a context window, Claude is told to write a
-  `HANDOFF.md` briefing and stop, instead of degrading silently.
-- **A statusline** showing model, current task, directory, and context usage.
+---
 
-The agreement itself covers how to plan work (verify lines approved before code),
-how much testing actually earns its place, git discipline (branch per phase, no
-force-push to main), and a set of records (`PLAN.md`, `ROADMAP.md`, `HANDOFF.md`)
-that keep a session honest across restarts. Read [`CLAUDE.md`](CLAUDE.md) — that
-file *is* the product; everything else just wires two pieces of it into Claude Code.
+## The Problem
 
-It's written in first person ("I plan, brief, review...") because it's a personal
-agreement between one person and their agent. Adopt it as-is and speak to Claude
-as "I" would, or edit it to fit how you work — it's a starting point, not a standard.
+Most AI coding sessions degrade into the same failure modes:
+- The AI writes sprawling, speculative code and asks you to review 500-line diffs.
+- Test suites stay 100% green while live user paths silently break.
+- Context windows fill up, the model forgets past decisions, and code rots across sessions.
 
-## What's here
+## What This Is
 
+**An opinionated, zero-slop operating protocol for building software with AI.** 
+
+Instead of treating Claude as an over-eager intern that spews endless diffs and fake-green tests, this repository establishes a disciplined division of labor:
+
+* **You (The Product Owner):** Own direction, define acceptance criteria upfront, and review observable user-facing behavior—never raw diffs.
+* **Claude (The Staff Engineer):** Orchestrates implementation, enforces branch and task isolation, verifies against live reality, and keeps the record honest across restarts.
+
+This repo pairs a foundational [`CLAUDE.md`](CLAUDE.md) working agreement with **three lightweight, self-enforcing hooks** that track costs, prevent silent context degradation, and display session vitals.
+
+---
+
+## Core Pillars
+
+### 1. Three Human Gates (Everything else is automated)
+- **Gate 1 (Upfront Acceptance):** Every task must have a plain-English `verify:` condition before code is written. Weak criteria ("make it work") are rejected.
+- **Gate 2 (Phase Acceptance):** Checked once against reality (via headless browser, live server, or committed demo script). No double-checking.
+- **Gate 3 (Decisions & Scope):** Trade-offs, new dependencies, and schema changes are escalated one at a time.
+
+### 2. Testing Earns Its Place
+A test is written only if it knows something the code does not:
+1. Pure logic with complex branching (TDD).
+2. Contracts from outside our head (documented external API shapes).
+3. Regressions actually encountered in the wild.
+*No presentation markup tests. No setter tests. No mock-heavy coverage theater.*
+
+### 3. Living Memory (Markdown as the Source of Truth)
+- `ROADMAP.md` — Strategic log, permanent architecture decisions (`D<n>`), and phase retros.
+- `PLAN.md` — The tactical sprint backlog for the active phase only. Re-baselined constantly.
+- `FEATURES.md` — Append-only living ledger of user-facing promises.
+- `HANDOFF.md` — Auto-generated session state briefings before context limits hit.
+
+### 4. Glassy Chat Reporting
+No narrative conversational filler. Every finished task hands back control in a scannable, standardized list:
+
+```text
+✓ Task 3: Email uniqueness check — done
+• Finished: Rejects duplicate registrations with inline error.
+• Evidence: test_duplicate_email passed (14ms); live curl verified 409 Conflict.
+• Git: a1b2c3d feat(auth): reject duplicate emails · pushed to feature/auth-flow
+• Next: Task 4: Password reset tokens — proceed?
 ```
-CLAUDE.md                     the agreement — put this at ~/.claude/CLAUDE.md
-hooks/session-cost-stop.js    Stop hook: prices a session's tokens, writes the row
-hooks/cost-report.js          cross-project cost report (run manually, anytime)
-hooks/context-handoff-stop.js Stop hook: blocks + asks Claude to write HANDOFF.md near the context limit
-hooks/statusline.sh           statusline: model | task | dir | context bar
-settings.snippet.json         the settings.json fragment that wires the two hooks + statusline in
+
+---
+
+## Repository Anatomy
+
+```text
+├── CLAUDE.md                     The core working agreement (install at ~/.claude/CLAUDE.md)
+├── settings.snippet.json         Configuration fragment for ~/.claude/settings.json
+└── hooks/
+    ├── session-cost-stop.js      Stop hook: prices tokens at API rates & logs to ledger
+    ├── context-handoff-stop.js   Stop hook: halts Claude & triggers HANDOFF.md near limit
+    ├── cost-report.js            CLI tool: cross-project spending analysis
+    └── statusline.sh             Shell script: model | task | dir | context % meter
 ```
 
-## Install
+---
 
-1. **Copy the agreement.**
-   Put `CLAUDE.md` at `~/.claude/CLAUDE.md`. If you already have one there, merge
-   by hand — this file is meant to be read whole, not appended to piecemeal.
+## Installation
 
-2. **Copy the hooks.**
-   ```
-   mkdir -p ~/.claude/hooks
-   cp hooks/*.js hooks/statusline.sh ~/.claude/hooks/
-   ```
-   The `.js` hooks run under Node and work on any OS. `statusline.sh` is a bash
-   script — on Windows it needs Git Bash (already on your PATH if you have Git
-   installed) or WSL; Claude Code's own `shell: "bash"` hook entries already
-   assume that.
-   Requires `jq` on your PATH for the statusline (`choco install jq` / `brew install jq`
-   / `apt install jq`).
-
-3. **Wire the hooks into `~/.claude/settings.json`.**
-   Merge the contents of [`settings.snippet.json`](settings.snippet.json) into your
-   existing `settings.json` — specifically the `env`, `hooks.Stop`, and `statusLine`
-   keys. If you already have other `Stop` hooks, add these as additional entries in
-   the same array rather than replacing it.
-
-4. **Opt a project in to cost tracking.**
-   The cost hook only writes to a project if `project-accounting.json` already
-   exists at that project's root — it's opt-in per project, not global. Create an
-   empty ledger to turn it on:
-   ```
-   echo {} > project-accounting.json
-   ```
-   From then on, every session in that directory gets a row (main + subagent
-   transcripts, priced at Anthropic list rates — an estimate, not a bill). If the
-   project also has a `HANDOFF.md`, its cost line is kept in sync automatically.
-
-## Customize
-
-Environment variables (set in `~/.claude/settings.json`'s `env` block, or per-shell):
-
-| Variable | Default | Effect |
-|---|---|---|
-| `CLAUDE_CONTEXT_HANDOFF_THRESHOLD` | `0.5` | Fraction of the context window (0–1) at which the handoff hook first fires. Re-fires every further 10 points of growth, and always at 70%+. |
-| `CLAUDE_CONTEXT_HANDOFF_DISABLED` | unset | Set to `1` to turn the context-handoff hook off entirely. |
-| `CLAUDE_SESSION_COST_DISABLED` | unset | Set to `1` to turn the cost hook off entirely (per project, delete `project-accounting.json` instead). |
-| `CLAUDE_PLAN_USD_MONTH` | `100` | Only read by `cost-report.js` — your subscription's monthly price, used to allocate it across projects pro rata. |
-
-## Reports
-
+### 1. Install the Agreement
+Copy `CLAUDE.md` to your global Claude configuration directory:
+```bash
+cp CLAUDE.md ~/.claude/CLAUDE.md
 ```
-node ~/.claude/hooks/cost-report.js                       # every project, to stdout
-node ~/.claude/hooks/cost-report.js --md report.md         # also write Markdown
-node ~/.claude/hooks/cost-report.js --project myapp        # one project's detail
+*(If you already have a global `CLAUDE.md`, review and merge it deliberately—this agreement is meant to function as a coherent whole).*
 
-node ~/.claude/hooks/session-cost-stop.js --backfill       # rebuild a project's ledger
-                                                             # from its transcripts (run
-                                                             # from that project's root)
+### 2. Install the Hooks
+```bash
+mkdir -p ~/.claude/hooks
+cp hooks/*.js hooks/statusline.sh ~/.claude/hooks/
 ```
+* **Requirements:**
+  * Node.js (cross-platform for `.js` hooks).
+  * `jq` for the statusline (`brew install jq` / `choco install jq` / `apt install jq`).
+  * On Windows, `statusline.sh` runs via Git Bash (included with Git for Windows) or WSL.
+
+### 3. Wire into Settings
+Merge the contents of [`settings.snippet.json`](settings.snippet.json) into your `~/.claude/settings.json`:
+- Adds environment defaults.
+- Registers the `Stop` hooks in `hooks.Stop`.
+- Enables the custom `statusLine`.
+
+### 4. Enable Project Cost Accounting (Opt-In)
+Cost tracking is non-intrusive and enabled per-project. To turn it on, touch an empty accounting file in the root of any repository:
+```bash
+echo {} > project-accounting.json
+```
+From then on, every session records estimated API costs based on token transcripts across primary and subagents.
+
+---
+
+## Configuration & Tuning
+
+Configure behavior via environment variables in `~/.claude/settings.json` (under `env`) or your shell profile:
+
+| Variable | Default | Description |
+| :--- | :--- | :--- |
+| `CLAUDE_CONTEXT_HANDOFF_THRESHOLD` | `0.5` | Context window fraction (0.0–1.0) where the handoff hook prompts Claude to summarize state into `HANDOFF.md`. Re-triggers at 70%+. |
+| `CLAUDE_CONTEXT_HANDOFF_DISABLED` | *unset* | Set to `1` to disable the automatic handoff trigger. |
+| `CLAUDE_SESSION_COST_DISABLED` | *unset* | Set to `1` to globally disable token cost calculations. |
+| `CLAUDE_PLAN_USD_MONTH` | `100` | Used by `cost-report.js` to allocate subscription costs pro-rata across projects. |
+
+---
+
+## Cost & Session Reports
+
+Inspect spending across projects anytime:
+
+```bash
+# View summary of all active projects in terminal
+node ~/.claude/hooks/cost-report.js
+
+# Export cross-project metrics to Markdown
+node ~/.claude/hooks/cost-report.js --md report.md
+
+# Inspect details for a single project
+node ~/.claude/hooks/cost-report.js --project myapp
+
+# Rebuild a project's accounting ledger from past session logs
+node ~/.claude/hooks/session-cost-stop.js --backfill
+```
+
+---
+
+## Philosophy
+
+This protocol is written in the first person (*"I plan, brief, review, verify..."*) because it represents a direct, personal pact between you and your agent. 
+
+Adopt it as-is, speak to Claude as an engineering partner, or fork and adapt it to your team's specific stack. It is a baseline for high-trust, high-rigor development.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+[MIT](LICENSE)
+````

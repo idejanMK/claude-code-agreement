@@ -1,0 +1,33 @@
+{
+  "env": {
+    "CLAUDE_CONTEXT_HANDOFF_THRESHOLD": "0.5"
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/context-handoff-stop.js\"",
+            "shell": "bash",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/session-cost-stop.js\"",
+            "shell": "bash",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"$HOME/.claude/hooks/statusline.sh\""
+  }
+}

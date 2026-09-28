@@ -100,6 +100,13 @@ Same names in every FULL project:
 - **PLAN.md** (hot): current phase only — tasks with `→ verify:`, `deps:`, status, open notes.
   Always present truth: re-baseline after a recut, no "supersedes" layers. On verify, compress a
   task to its verify line + `✅ VERIFIED <date>` + `KEEPERS:`; the transcript goes in the commit.
+- **Layout (every record, every project) — built for scanning.** Headings carry the hierarchy so the
+  editor outline is the index: one `###` per task, phase closure, decision (`#### D<n> — one-line title`)
+  and gotcha topic. Newest first in every list. PLAN opens with "At a glance" (branch · next · waiting on
+  the user) and a task table (task · what · status); each task then carries labelled lines — Verify /
+  Evidence / Keepers / Deps. ROADMAP: Phases (Now / Done / Later tables) · Decisions (index by topic, then
+  the log) · Closures · Backlog (ideas by topic · built since filed · ✗ dropped) · Gotchas (by topic).
+  Content stays append-only; restructuring moves text, never loses it.
 - **FEATURES.md** (ledger, FOR the user): one plain line per agreed behaviour; append-only,
   never trimmed; dropped behaviour recorded as `✗` + reason. Converted, line by line, into an
   executable e2e ledger where one exists.
@@ -114,12 +121,18 @@ Same names in every FULL project:
 - **Session bootstrap:** read HANDOFF.md (if newer than the last commit), PLAN.md, ROADMAP's
   current phase, `git log --oneline -15`. Git beats PLAN; reconcile PLAN first. No files = new
   project: scaffold CLAUDE.md (`@PLAN.md` first line), ROADMAP.md, PLAN.md. Never work from
-  memory of a past session.
+  memory of a past session. Then, unasked, one short message: state (branch, clean/pushed,
+  anything to reconcile) and what is next with a recommended pick — the user should never have
+  to ask "what is next" after a boot. An uncommitted planning-doc line tagged `[by Notetaker]`
+  (filed by `/note`) is mine: triage it (backlog, task, decision), commit it with a `docs(...)`
+  commit naming the user, never leave it hanging.
 - **`~/.claude` is itself a git repo** (local, no remote — it holds credentials' neighbours and
   server details). It tracks the hooks, statusline, settings.json, this file, agents, commands
   and hand-written skills. Every edit I make in there gets a conventional commit in that repo,
   in the same session. `.gitignore` is an allowlist: add new config by un-ignoring it, never by
-  loosening the `*`.
+  loosening the `*`. The agreement is mirrored publicly at `github.com/idejanMK/claude-code-agreement`
+  (this file, the hooks, the agents and skills it names): every change that is process, not personal
+  preference or private detail, is pushed there in the same session.
 
 ## Cost tracking — machine-written, never by hand
 I cannot see my own token usage, so I never write a cost figure. The Stop hook

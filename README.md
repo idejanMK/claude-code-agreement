@@ -63,6 +63,9 @@ No narrative conversational filler. Every finished task hands back control in a 
 ```text
 ├── CLAUDE.md                     The core working agreement (install at ~/.claude/CLAUDE.md)
 ├── settings.snippet.json         Configuration fragment for ~/.claude/settings.json
+├── agents/
+│   └── note-taker.md             Filing clerk: puts a note in the right planning doc, tagged [by Notetaker]
+├── skills/note/SKILL.md          /note <text> — dispatches the note-taker; the orchestrator commits the note
 └── hooks/
     ├── session-cost-stop.js      Stop hook: prices tokens at API rates & logs to ledger
     ├── context-handoff-stop.js   Stop hook: halts Claude & triggers HANDOFF.md near limit

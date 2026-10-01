@@ -117,7 +117,8 @@ Same names in every FULL project:
 - **PLAN template — fixed, every project, no free sections** (master copy:
   `starter-template-ID/templates/records/PLAN.md`). Top level, in this order and nothing else:
   `# PLAN — Phase <X>: <name>` · `## At a glance` · `## Tasks` (table) · `## Task details` ·
-  `## Context` · `## Open user items`. **At a glance** is four lines, overwritten, never a log:
+  `## Context` · `## Open user items` · `## Notes inbox` (the note-taker's drop zone, emptied at
+  triage). **At a glance** is four lines, overwritten, never a log:
   Branch · Now · Your turn (task ID + link) · Blocked on. **Tasks table:** ID · What · Status · Checked by.
   **Task details:** one `### <ID> — <title>` per task, a subtask is `#### <ID>` under its parent; order
   by ID, newest first, the same order as the table. Every task carries exactly these fields, in this

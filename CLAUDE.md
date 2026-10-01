@@ -5,6 +5,14 @@ decides whether the product works; they review behaviour, never diffs. I plan, b
 verify, and keep the record honest. Be direct, opinionated, and concise; say plainly when
 something is wrong or fishy. Write simply (short sentences, one idea each, common words,
 jargon explained once) in every reply, report, and doc.
+- **Answer first, then why.** Every reply opens with the answer, verdict or instruction in one line;
+  then a short plain explanation, only as much as the user needs to act or understand. No preamble,
+  no recap of what the user already knows, no narration of process. Cut any sentence that changes
+  nothing the user does or understands.
+- **Point, don't describe.** When I ask the user to do or check something, the message names the task
+  ID and links its exact place (`[PLAN.md → S6d](PLAN.md#L364)`), quotes the verify line(s) to check,
+  and lists the steps — so nothing has to be searched for. In PLAN the same steps sit in the task's
+  **Your part** field.
 
 ## Profiles
 Decide at project start; record in the project CLAUDE.md. **FULL** when the project has ANY of:
@@ -97,16 +105,28 @@ no silent failures) regardless of feature pressure · LSP for symbols, grep for 
 Same names in every FULL project:
 - **ROADMAP.md** (cold): phases, decision log `D<n>`, one-line closure per phase, durable
   gotchas. Append-only.
-- **PLAN.md** (hot): current phase only — tasks with `→ verify:`, `deps:`, status, open notes.
-  Always present truth: re-baseline after a recut, no "supersedes" layers. On verify, compress a
-  task to its verify line + `✅ VERIFIED <date>` + `KEEPERS:`; the transcript goes in the commit.
+- **PLAN.md** (hot): current phase only, in the fixed template below. Always present truth:
+  re-baseline after a recut, no "supersedes" layers. On verify, the task keeps its fields and its
+  Evidence shrinks to one line per verify line; the transcript goes in the commit.
 - **Layout (every record, every project) — built for scanning.** Headings carry the hierarchy so the
   editor outline is the index: one `###` per task, phase closure, decision (`#### D<n> — one-line title`)
-  and gotcha topic. Newest first in every list. PLAN opens with "At a glance" (branch · next · waiting on
-  the user) and a task table (task · what · status); each task then carries labelled lines — Verify /
-  Evidence / Keepers / Deps. ROADMAP: Phases (Now / Done / Later tables) · Decisions (index by topic, then
-  the log) · Closures · Backlog (ideas by topic · built since filed · ✗ dropped) · Gotchas (by topic).
+  and gotcha topic. Newest first in every list. PLAN follows the fixed template below. ROADMAP: Phases
+  (Now / Done / Later tables) · Decisions (index by topic, then the log) · Closures · Backlog (ideas by
+  topic · built since filed · ✗ dropped) · Gotchas (by topic).
   Content stays append-only; restructuring moves text, never loses it.
+- **PLAN template — fixed, every project, no free sections** (master copy:
+  `starter-template-ID/templates/records/PLAN.md`). Top level, in this order and nothing else:
+  `# PLAN — Phase <X>: <name>` · `## At a glance` · `## Tasks` (table) · `## Task details` ·
+  `## Context` · `## Open user items`. **At a glance** is four lines, overwritten, never a log:
+  Branch · Now · Your turn (task ID + link) · Blocked on. **Tasks table:** ID · What · Status · Checked by.
+  **Task details:** one `### <ID> — <title>` per task, a subtask is `#### <ID>` under its parent; order
+  by ID, newest first, the same order as the table. Every task carries exactly these fields, in this
+  order, each present (`—` when empty): **Status** (todo · building · built · ✅ verified <date> by
+  <who> · ✗ dropped — reason) · **Why** (≤2 lines) · **Scope** (what changes, what does not) ·
+  **Verify** (numbered lines + approval date) · **Your part** (the user's steps, or `—`) ·
+  **Evidence** (per verify line: met / not met, who, how; later dated runs as sub-bullets) ·
+  **Keepers** · **Deps**. No other field names; user runs, causes and side findings go under Evidence
+  as dated sub-bullets; anything longer goes to the commit or ROADMAP.
 - **FEATURES.md** (ledger, FOR the user): one plain line per agreed behaviour; append-only,
   never trimmed; dropped behaviour recorded as `✗` + reason. Converted, line by line, into an
   executable e2e ledger where one exists.

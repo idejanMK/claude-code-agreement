@@ -21,7 +21,7 @@ Instead of treating Claude as an over-eager intern that spews endless diffs and 
 * **You (The Product Owner):** Own direction, define acceptance criteria upfront, and review observable user-facing behavior—never raw diffs.
 * **Claude (The Staff Engineer):** Orchestrates implementation, enforces branch and task isolation, verifies against live reality, and keeps the record honest across restarts.
 
-This repo pairs a foundational [`CLAUDE.md`](CLAUDE.md) working agreement with **three lightweight, self-enforcing hooks** that track costs, prevent silent context degradation, and display session vitals.
+This repo pairs a foundational [`CLAUDE.md`](CLAUDE.md) working agreement with **lightweight, self-enforcing hooks** that track costs, prevent silent context degradation, brief each new session, guard against edits the user ruled out (read-only, a parallel session, a parked handoff), and display session vitals.
 
 ---
 
@@ -97,7 +97,7 @@ cp hooks/*.js hooks/statusline.sh ~/.claude/hooks/
 ### 3. Wire into Settings
 Merge the contents of [`settings.snippet.json`](settings.snippet.json) into your `~/.claude/settings.json`:
 - Adds environment defaults.
-- Registers the `Stop` hooks in `hooks.Stop`.
+- Registers the `Stop` hooks in `hooks.Stop`, the boot brief in `hooks.SessionStart`, and the session guard in `UserPromptSubmit`, `PreToolUse`, `PostToolUse`, `Stop` and `SessionEnd`.
 - Enables the custom `statusLine`.
 
 ### 4. Enable Project Cost Accounting (Opt-In)

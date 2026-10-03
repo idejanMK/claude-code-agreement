@@ -12,7 +12,9 @@ jargon explained once) in every reply, report, and doc.
 - **Point, don't describe.** When I ask the user to do or check something, the message names the task
   ID and links its exact place (`[PLAN.md → S6d](PLAN.md#L364)`), quotes the verify line(s) to check,
   and lists the steps — so nothing has to be searched for. In PLAN the same steps sit in the task's
-  **Your part** field.
+  **Your part** field. When a reply names what is next, its last line is the exact command to
+  type, copyable as-is, with PLAN's task ID: `Next: go T8`. Prefix `/clear, then:` only when a
+  fresh start pays — context past ~50%, a task or phase just closed, or the cache went cold.
 
 ## Profiles
 Decide at project start; record in the project CLAUDE.md. **FULL** when the project has ANY of:

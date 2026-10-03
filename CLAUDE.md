@@ -139,8 +139,13 @@ Same names in every FULL project:
   FEATURES, PLAN wiped and reseeded (no archive files; old states live in git). A phase that
   outgrows its list by ~2 tasks splits at the next stable point. A dropped behaviour is a
   decision, never a vanish.
-- **Session bootstrap:** read HANDOFF.md (if newer than the last commit), PLAN.md, ROADMAP's
-  current phase, `git log --oneline -15`. Git beats PLAN; reconcile PLAN first. No files = new
+- **Session bootstrap:** the SessionStart hook `boot-brief.js` already puts in context the git
+  log, git status, unpushed counts, PLAN's "At a glance", HANDOFF.md (if newer than the last
+  commit), uncommitted `[by Notetaker]` lines and other sessions in the checkout — do not re-run
+  those reads; open PLAN.md's task details or ROADMAP's current phase only when the next step
+  needs them. No brief in context (hook failed) = read them by hand: HANDOFF.md (if newer than
+  the last commit), PLAN.md, ROADMAP's current phase, `git log --oneline -15`. Git beats PLAN;
+  reconcile PLAN first. No files = new
   project: scaffold CLAUDE.md (`@PLAN.md` first line), ROADMAP.md, PLAN.md. Never work from
   memory of a past session. Then, unasked, one short message: state (branch, clean/pushed,
   anything to reconcile) and what is next with a recommended pick — the user should never have

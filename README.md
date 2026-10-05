@@ -21,7 +21,7 @@ Instead of treating Claude as an over-eager intern that spews endless diffs and 
 * **You (The Product Owner):** Own direction, define acceptance criteria upfront, and review observable user-facing behavior—never raw diffs.
 * **Claude (The Staff Engineer):** Orchestrates implementation, enforces branch and task isolation, verifies against live reality, and keeps the record honest across restarts.
 
-This repo pairs a foundational [`CLAUDE.md`](CLAUDE.md) working agreement with **lightweight, self-enforcing hooks** that track costs, prevent silent context degradation, brief each new session, guard against edits the user ruled out (read-only, a parallel session, a parked handoff), and display session vitals.
+This repo pairs a foundational [`CLAUDE.md`](CLAUDE.md) working agreement with **lightweight, self-enforcing hooks** that track costs, prevent silent context degradation, brief each new session, guard against edits the user ruled out (read-only, a "let's talk" critique loop, a parallel session, a parked handoff), and display session vitals.
 
 ---
 

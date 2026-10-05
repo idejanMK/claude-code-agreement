@@ -2,7 +2,7 @@
 // Stop hook: one footer line under each reply, for the user only (systemMessage,
 // not added to Claude's context; no model call). Replaces the status line in the
 // VS Code panel, where the status line does not run. Shows:
-//   branch ●changed ↑unpushed · 🔒 read-only · ⚠ other session working ·
+//   branch ●changed ↑unpushed · 💬 talk / 🔒 read-only · ⚠ other session working ·
 //   cache <size> warm till HH:MM (TTL read from the transcript's last usage block)
 // Fails silent.
 
@@ -51,7 +51,8 @@ try {
   }
 
   const rec = input.session_id ? guard.load(input.session_id) : null;
-  if (rec && rec.readOnly) parts.push("🔒 read-only");
+  if (rec && rec.talk) parts.push("💬 talk (say accepted to end)");
+  else if (rec && rec.readOnly) parts.push("🔒 read-only");
   if (rec && guard.others(rec).some((o) => o.busyNow)) parts.push("⚠ other session working");
 
   const last = lastUsage(input.transcript_path);

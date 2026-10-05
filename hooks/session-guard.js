@@ -2,7 +2,8 @@
 // Session guard: a registry of live Claude sessions per checkout, plus a write
 // guard (PreToolUse) that blocks file edits inside any git checkout and git
 // write commands (scratchpad and auto-memory stay open) when
-//   (a) the user put this session in read-only mode by their own wording,
+//   (a) the user put this session in read-only mode by their own wording
+//       (or in talk mode: "let's talk", a critique loop reminded every turn),
 //   (b) another session is mid-turn and its last write went to the same
 //       checkout (first writer wins; a session that only reads never blocks),
 //   (c) this session parked its handoff this turn (only HANDOFF.md edits and
@@ -42,6 +43,17 @@ const RO_OFF_START =
   /^\s*((ok|yes|good|great|approved)[,.!]?\s+)*(go|build|approved|proceed|unlock|do it|implement)(\s*[,.!]|\s*$|\s+(ahead|build|buld|on|save|fix|start|do|with|merge|implement|for it|it)\b)/i;
 const RO_OFF_ANY =
   /(?<!(not|n't|dont|no)\s+)\b(go build|go ahead|build it|you can (now )?(edit|write|build|change)|unlock)\b/i;
+// Talk mode: "let's talk" starts a critique loop (read-only while it runs);
+// "accepted"/"agreed" or a go-ahead ends it.
+const TALK_ON = /\blet'?s\s+talk\b/i;
+const TALK_OFF = /(?<!(not|n't|dont|no)\s+)\b(accepted|agreed|resolved)\b/i;
+const TALK_RULES =
+  "[session-guard] Talk mode is ON (the user said \"let's talk\"). This is a discussion, not a build. " +
+  "Every reply: (1) criticize: say plainly what is weak, wrong or risky; (2) push back where you " +
+  "disagree, with the reason; (3) suggest the better option; (4) end with the one point still open, " +
+  "as a short question. Build on the user's last answer and drop points they settled. File edits and " +
+  "git writes are blocked. The loop ends when the user says accepted, agreed, go or build; then " +
+  "restate the agreed result in a few lines.";
 // Messages from Claude's own agents and the harness arrive as prompts too.
 const NOT_USER = /^\s*(<agent-message|<task-notification|\[SYSTEM NOTIFICATION|<system-reminder)/;
 const PARK_WORDS =
@@ -181,9 +193,21 @@ const handlers = {
     rec.promptAt = Date.now();
     rec.prompt = prompt.slice(0, 300);
     const on = prompt.match(RO_ON);
-    if (RO_OFF_START.test(prompt) || (!on && RO_OFF_ANY.test(prompt))) {
-      if (rec.readOnly) console.log("[session-guard] Read-only mode OFF.");
+    if (TALK_ON.test(prompt)) {
+      rec.talk = true;
+      rec.readOnly = true;
+      rec.readOnlyWhy = "let's talk";
+      console.log(TALK_RULES);
+    } else if (RO_OFF_START.test(prompt) || (!on && RO_OFF_ANY.test(prompt))) {
+      if (rec.talk) console.log("[session-guard] Talk mode OFF. Restate the agreed result in a few lines.");
+      else if (rec.readOnly) console.log("[session-guard] Read-only mode OFF.");
+      rec.talk = false;
       rec.readOnly = false;
+    } else if (rec.talk && TALK_OFF.test(prompt)) {
+      console.log("[session-guard] Talk mode OFF (accepted). Restate the agreed result in a few lines; still read-only until the user says go or build.");
+      rec.talk = false;
+    } else if (rec.talk) {
+      console.log(TALK_RULES);
     } else if (on) {
       if (!rec.readOnly)
         console.log(
@@ -254,7 +278,7 @@ const handlers = {
   },
 };
 
-module.exports = { load, save, ensure, others, rootOf, patterns: { RO_ON, RO_OFF_START, RO_OFF_ANY, PARK_WORDS, GIT_WRITE } };
+module.exports = { load, save, ensure, others, rootOf, patterns: { RO_ON, RO_OFF_START, RO_OFF_ANY, TALK_ON, TALK_OFF, PARK_WORDS, GIT_WRITE } };
 
 if (require.main === module) {
   try {

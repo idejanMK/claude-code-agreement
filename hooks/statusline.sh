@@ -1,7 +1,8 @@
 #!/bin/bash
-# Claude Code statusline: model | current task | directory | context usage.
-# Also relays .context_window.used_percentage (verbatim, no math) to a
-# per-session state file that hooks/context-handoff-stop.js reads.
+# Claude Code Statusline
+# Shows: model | current task | directory | context usage
+# Also RELAYS .context_window.used_percentage (verbatim, no math) to a
+# per-session state file consumed by ~/.claude/hooks/context-handoff-stop.js.
 
 input=$(cat)
 model=$(echo "$input" | jq -r '.model.display_name')

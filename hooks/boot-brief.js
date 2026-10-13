@@ -56,7 +56,7 @@ if (top) {
   }
   section("push state", lines.join("\n"));
 
-  const notes = (git("diff", "HEAD", "-U0", "--", "PLAN.md", "ROADMAP.md") || "")
+  const notes = (git("diff", "HEAD", "-U0", "--", "PLAN.md", "ROADMAP.md", "NOTES.md") || "")
     .split("\n").filter((l) => l.startsWith("+") && l.includes("[by Notetaker]"));
   section("uncommitted [by Notetaker] lines (triage these)", notes.join("\n"));
 }
@@ -65,6 +65,20 @@ const plan = read(path.join(root, "PLAN.md"));
 if (plan) {
   const m = plan.match(/^## At a glance\s*\n([\s\S]*?)(?=^## )/m);
   section("PLAN.md — At a glance", m ? m[1].trim() : null);
+  // Records v2: the open phase file and the inbox (~/.claude/rules/records.md).
+  const op = plan.match(/^## Open phase\s*\n([\s\S]*?)(?=^## |\s*$(?![\s\S]))/m);
+  if (op) section("PLAN.md — Open phase", op[1].trim());
+}
+const inbox = read(path.join(root, "NOTES.md"));
+if (inbox) {
+  const open = inbox.split("\n").filter((l) => /^- N\d+ \(/.test(l));
+  const asked = inbox.split("\n").filter((l) => /^- \? N\d+ \(/.test(l));
+  const oldest = open.length ? (open[0].match(/\((\d{4}-\d{2}-\d{2})\)/) || [])[1] : null;
+  section(
+    "NOTES.md — inbox",
+    `${open.length} untriaged${oldest ? ` (oldest ${oldest})` : ""} — mine to /triage` +
+      (asked.length ? `; ${asked.length} waiting for the user's answer` : "")
+  );
 }
 
 const handoffPath = path.join(root, "HANDOFF.md");

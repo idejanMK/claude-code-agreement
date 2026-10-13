@@ -164,6 +164,18 @@ function busyWriter(rec, target) {
   return null;
 }
 
+// Records v2: a records/phases/<n>.<k>.md whose Status is "closed <date>" is frozen.
+function closedPhaseFile(input) {
+  try {
+    const p = (input.tool_input || {}).file_path || "";
+    if (!/[\\/]records[\\/]phases[\\/]\d+\.\d+\.md$/.test(p)) return false;
+    const abs = path.resolve(input.cwd || process.cwd(), winPath(p));
+    return /^- \*\*Status:\*\* closed \d{4}-\d{2}-\d{2}/m.test(fs.readFileSync(abs, "utf8"));
+  } catch {
+    return false;
+  }
+}
+
 function deny(reason) {
   console.log(JSON.stringify({
     hookSpecificOutput: {
@@ -235,6 +247,11 @@ const handlers = {
         "Session guard: the handoff is written, so this session is parked. Commit and push the " +
         "handoff if needed, then end the turn. Start no new edit or agent (user rule: the handoff " +
         "is the last act). It reopens on the user's next message.";
+    } else if (isFile && closedPhaseFile(input)) {
+      reason =
+        "Session guard: this phase file is closed (its Status line says so) and closed phase files " +
+        "are frozen (~/.claude/rules/records.md, rule 3). A correction goes to ROADMAP's Gotchas or " +
+        "Decisions, or to the open phase; the closed record stays as it was.";
     } else if (target && rec.readOnly) {
       reason =
         `Session guard: read-only mode. The user said "${rec.readOnlyWhy}". Do not edit or run git ` +

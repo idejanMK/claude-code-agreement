@@ -91,6 +91,12 @@
             "command": "node \"$HOME/.claude/hooks/session-guard.js\" post",
             "shell": "bash",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/records-lint.js\" --hook",
+            "shell": "bash",
+            "timeout": 10
           }
         ]
       }

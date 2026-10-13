@@ -39,11 +39,21 @@ A test is written only if it knows something the code does not:
 3. Regressions actually encountered in the wild.
 *No presentation markup tests. No setter tests. No mock-heavy coverage theater.*
 
-### 3. Living Memory (Markdown as the Source of Truth)
-- `ROADMAP.md` — Strategic log, permanent architecture decisions (`D<n>`), and phase retros.
-- `PLAN.md` — The tactical sprint backlog for the active phase only. Re-baselined constantly.
-- `FEATURES.md` — Append-only living ledger of user-facing promises.
-- `HANDOFF.md` — Auto-generated session state briefings before context limits hit.
+### 3. Living Memory (Markdown as the Source of Truth) — records v2
+One grammar, one home per ID: milestone `M<n>` → phase `<n>.<k>` → task `<n>.<k>.<t>`, plus decisions
+`D<n>`, backlog `B<n>`, notes `N<n>`, features `F<n>`. Next free number, never renumbered; order lives in
+tables, not in numbers.
+- `PLAN.md` — a fixed dashboard (At a glance + the link to the open phase). It cannot grow.
+- `records/phases/<n>.<k>.md` — the phase's home from proposal to closure; frozen once closed.
+- `ROADMAP.md` — milestones, decisions (`D<n>`), backlog (`B<n>`), gotchas. Append-only.
+- `NOTES.md` — the only inbox (`/note` writes, `/triage` empties into `records/notes-log.md`).
+- `FEATURES.md` — append-only ledger of verified behaviours (FULL profile).
+- `HANDOFF.md` — auto-generated session state before context limits hit.
+
+The grammar is a path-scoped rule (`rules/records.md`, loads only when a record is touched), the
+templates are in `templates/records/`, and `hooks/records-lint.js` enforces the shape after every edit.
+The procedures are skills: `/interview` shapes a phase, `/open-phase` opens it, `/close-phase` closes it,
+`/triage` empties the inbox.
 
 ### 4. Glassy Chat Reporting
 No narrative conversational filler. Every finished task hands back control in a scannable, standardized list:
@@ -63,10 +73,21 @@ No narrative conversational filler. Every finished task hands back control in a 
 ```text
 ├── CLAUDE.md                     The core working agreement (install at ~/.claude/CLAUDE.md)
 ├── settings.snippet.json         Configuration fragment for ~/.claude/settings.json
+├── rules/records.md              The records grammar; path-scoped, loads only when a record is touched
+├── templates/records/            CLAUDE.md, PLAN.md, ROADMAP.md, NOTES.md and a phase file to copy into a new project
 ├── agents/
-│   └── note-taker.md             Filing clerk: puts a note in the right planning doc, tagged [by Notetaker]
-├── skills/note/SKILL.md          /note <text> — dispatches the note-taker; the orchestrator commits the note
+│   └── note-taker.md             Filing clerk: appends a numbered note to NOTES.md, tagged [by Notetaker]
+├── skills/
+│   ├── note/SKILL.md             /note <text> — dispatches the note-taker; the orchestrator triages later
+│   ├── interview/SKILL.md        /interview — evaluate an idea, or shape a phase into a records/phases file
+│   ├── open-phase/SKILL.md       /open-phase <id> — gate 1 on record → status, branch, dashboard, commit
+│   ├── close-phase/SKILL.md      /close-phase — gate 2 + full gate once → Closure, freeze, propose the merge
+│   └── triage/SKILL.md           /triage — every note becomes a task, a backlog item, a decision or a question
 └── hooks/
+    ├── boot-brief.js             SessionStart: git state, PLAN's At a glance, open phase, inbox count
+    ├── session-guard.js          Guards: read-only / talk mode, parallel sessions, frozen phase files
+    ├── records-lint.js           The grammar as code; PostToolUse after every record edit, or run by hand
+    ├── turn-footer.js            Stop hook: one footer line under each reply (branch, mode, cache)
     ├── session-cost-stop.js      Stop hook: prices tokens at API rates & logs to ledger
     ├── context-handoff-stop.js   Stop hook: halts Claude & triggers HANDOFF.md near limit
     ├── cost-report.js            CLI tool: cross-project spending analysis
@@ -84,11 +105,16 @@ cp CLAUDE.md ~/.claude/CLAUDE.md
 ```
 *(If you already have a global `CLAUDE.md`, review and merge it deliberately—this agreement is meant to function as a coherent whole).*
 
-### 2. Install the Hooks
+### 2. Install the Hooks, the Rule, the Agents and the Skills
 ```bash
-mkdir -p ~/.claude/hooks
+mkdir -p ~/.claude/hooks ~/.claude/rules ~/.claude/agents ~/.claude/skills
 cp hooks/*.js hooks/statusline.sh ~/.claude/hooks/
+cp rules/records.md ~/.claude/rules/
+cp agents/*.md ~/.claude/agents/
+cp -r skills/* ~/.claude/skills/
 ```
+For a new project, copy `templates/records/` into its root and fill the placeholders (the `open-phase`
+skill and `records-lint.js` expect that layout).
 * **Requirements:**
   * Node.js (cross-platform for `.js` hooks).
   * `jq` for the statusline (`brew install jq` / `choco install jq` / `apt install jq`).

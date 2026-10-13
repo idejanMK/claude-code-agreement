@@ -1,0 +1,5 @@
+{
+  "name": "records",
+  "version": "0.1.0",
+  "description": "Records v2 pilot: /plan-check lints the records against the grammar, the PLAN dashboard rides every request as a system-prompt section, and a pane shows it where the surface draws (terminal, desktop)."
+}

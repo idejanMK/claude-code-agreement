@@ -83,6 +83,7 @@ No narrative conversational filler. Every finished task hands back control in a 
 │   ├── open-phase/SKILL.md       /open-phase <id> — gate 1 on record → status, branch, dashboard, commit
 │   ├── close-phase/SKILL.md      /close-phase — gate 2 + full gate once → Closure, freeze, propose the merge
 │   └── triage/SKILL.md           /triage — every note becomes a task, a backlog item, a decision or a question
+├── mods/records/                 Pilot mod: /plan-check, the dashboard as a system-prompt section, a terminal pane
 └── hooks/
     ├── boot-brief.js             SessionStart: git state, PLAN's At a glance, open phase, inbox count
     ├── session-guard.js          Guards: read-only / talk mode, parallel sessions, frozen phase files

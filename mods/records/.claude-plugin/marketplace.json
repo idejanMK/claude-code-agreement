@@ -1,0 +1,7 @@
+{
+  "name": "records-mods",
+  "owner": { "name": "Dejan" },
+  "plugins": [
+    { "name": "records", "source": "./", "description": "Records v2 pilot: /plan-check, a live dashboard section, a pane." }
+  ]
+}

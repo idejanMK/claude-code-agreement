@@ -88,8 +88,10 @@ No narrative conversational filler. Every finished task hands back control in a 
     ├── boot-brief.js             SessionStart: git state, PLAN's At a glance, open phase, inbox count
     ├── session-guard.js          Guards: read-only / talk mode, parallel sessions, frozen phase files
     ├── records-lint.js           The grammar as code; PostToolUse after every record edit, or run by hand
-    ├── turn-footer.js            Stop hook: one footer line under each reply (branch, mode, cache)
-    ├── session-cost-stop.js      Stop hook: prices tokens at API rates & logs to ledger
+    ├── turn-footer.js            Stop hook: one footer line under each reply (branch, mode, cache, price of a cold resume)
+    ├── session-cost-stop.js      Stop hook: prices tokens at API rates & logs to ledger (main and subagents split)
+    ├── cold-resume-gate.js       UserPromptSubmit: asks once before a turn that re-writes an expired cache
+    ├── cost-lib.js               Shared by the three above: the one price table, cache state
     ├── context-handoff-stop.js   Stop hook: halts Claude & triggers HANDOFF.md near limit
     ├── cost-report.js            CLI tool: cross-project spending analysis
     └── statusline.sh             Shell script: model | task | dir | context % meter
@@ -124,7 +126,7 @@ skill and `records-lint.js` expect that layout).
 ### 3. Wire into Settings
 Merge the contents of [`settings.snippet.json`](settings.snippet.json) into your `~/.claude/settings.json`:
 - Adds environment defaults.
-- Registers the `Stop` hooks in `hooks.Stop`, the boot brief in `hooks.SessionStart`, and the session guard in `UserPromptSubmit`, `PreToolUse`, `PostToolUse`, `Stop` and `SessionEnd`.
+- Registers the `Stop` hooks in `hooks.Stop`, the boot brief in `hooks.SessionStart`, the cold-resume gate in `UserPromptSubmit`, and the session guard in `UserPromptSubmit`, `PreToolUse`, `PostToolUse`, `Stop` and `SessionEnd`.
 - Enables the custom `statusLine`.
 
 ### 4. Enable Project Cost Accounting (Opt-In)
@@ -145,6 +147,8 @@ Configure behavior via environment variables in `~/.claude/settings.json` (under
 | `CLAUDE_CONTEXT_HANDOFF_THRESHOLD` | `0.5` | Context window fraction (0.0–1.0) where the handoff hook prompts Claude to summarize state into `HANDOFF.md`. Re-triggers at 70%+. |
 | `CLAUDE_CONTEXT_HANDOFF_DISABLED` | *unset* | Set to `1` to disable the automatic handoff trigger. |
 | `CLAUDE_SESSION_COST_DISABLED` | *unset* | Set to `1` to globally disable token cost calculations. |
+| `CLAUDE_COLD_RESUME_MIN_USD` | `2` | The cold-resume gate asks once when re-writing an expired prompt cache would cost this much or more. |
+| `CLAUDE_COLD_RESUME_DISABLED` | *unset* | Set to `1` to disable the cold-resume gate. |
 | `CLAUDE_PLAN_USD_MONTH` | `100` | Used by `cost-report.js` to allocate subscription costs pro-rata across projects. |
 
 ---

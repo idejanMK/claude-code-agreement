@@ -65,6 +65,12 @@
             "command": "node \"$HOME/.claude/hooks/session-guard.js\" prompt",
             "shell": "bash",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/cold-resume-gate.js\"",
+            "shell": "bash",
+            "timeout": 10
           }
         ]
       }

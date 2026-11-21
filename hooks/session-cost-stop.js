@@ -23,22 +23,8 @@ const fs = require("fs");
 const path = require("path");
 const os = require("os");
 
-// USD per 1M tokens: [input, cache_write(5m), cache_read, output]
-const PRICES = [
-  ["claude-fable-5-1", [10, 12.5, 0.25, 50]],
-  ["claude-mythos-5-1", [10, 12.5, 0.25, 50]],
-  ["claude-fable-5", [10, 12.5, 1.0, 50]],
-  ["claude-opus-5", [5, 6.25, 0.5, 25]],
-  ["claude-opus-4", [5, 6.25, 0.5, 25]],
-  ["claude-sonnet-5", [2, 2.5, 0.2, 10]],
-  ["claude-sonnet-4-6", [3, 3.75, 0.3, 15]],
-  ["claude-haiku-4-5", [1, 1.25, 0.1, 5]],
-];
-
-function priceFor(model) {
-  const hit = PRICES.find(([sub]) => model.startsWith(sub));
-  return hit ? hit[1] : null;
-}
+// One price table for every hook: cost-lib.js.
+const { priceFor, HOUR_WRITE } = require("./cost-lib.js");
 
 function readStdin() {
   try {
@@ -76,6 +62,7 @@ function collect(file, acc, isMain) {
     const cc = msg.usage.cache_creation || {};
     const cw1h = cc.ephemeral_1h_input_tokens || 0;
     acc.byId.set(id, {
+      main: isMain,
       model,
       in: msg.usage.input_tokens || 0,
       cw: Math.max(0, (msg.usage.cache_creation_input_tokens || 0) - cw1h),
@@ -103,9 +90,22 @@ function summarize(sessionId, transcriptPath) {
   } catch {}
   for (const n of subFiles) collect(path.join(subDir, n), acc, false);
 
+  // The transcript's gitBranch can be the literal "HEAD" (seen on an exFAT checkout);
+  // ask git in the session's cwd instead. One session per checkout, so the current
+  // branch at Stop time is the session's branch.
+  if (acc.cwd && (acc.branches.length === 0 || acc.branches.includes("HEAD"))) {
+    try {
+      const b = require("child_process")
+        .execFileSync("git", ["-C", acc.cwd, "branch", "--show-current"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] })
+        .trim();
+      if (b) acc.branches = [...acc.branches.filter((x) => x !== "HEAD"), b];
+    } catch {}
+  }
+
   const models = {};
   const unpriced = new Set();
   let usd = 0;
+  let usdMain = 0;
   let total = 0;
   for (const u of acc.byId.values()) {
     const m = (models[u.model] ||= { turns: 0, input: 0, cache_write: 0, cache_read: 0, output: 0, est_usd: null });
@@ -120,9 +120,10 @@ function summarize(sessionId, transcriptPath) {
       unpriced.add(u.model);
       continue;
     }
-    const c = (u.in * p[0] + u.cw * p[1] + u.cw1h * p[1] * 1.6 + u.cr * p[2] + u.out * p[3]) / 1e6;
+    const c = (u.in * p[0] + u.cw * p[1] + u.cw1h * p[1] * HOUR_WRITE + u.cr * p[2] + u.out * p[3]) / 1e6;
     m.est_usd = (m.est_usd || 0) + c;
     usd += c;
+    if (u.main) usdMain += c;
   }
   for (const m of Object.values(models)) if (m.est_usd !== null) m.est_usd = +m.est_usd.toFixed(2);
 
@@ -144,6 +145,8 @@ function summarize(sessionId, transcriptPath) {
     subagent_transcripts: subFiles.length,
     tokens_total: total,
     est_usd: +usd.toFixed(2),
+    est_usd_main: +usdMain.toFixed(2),
+    est_usd_subagents: +(usd - usdMain).toFixed(2),
     unpriced_models: [...unpriced],
     models,
   };

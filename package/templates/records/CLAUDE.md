@@ -5,9 +5,9 @@ one database, planned life over a month).
 
 **What:** one sentence: what this product does and for whom.
 
-**Stack:** copied from starter-template-ID variant {{VARIANT}}; see README for the commands.
+**Stack:** one line: languages, framework, database, hosting.
 
-**Commands:** dev · test · lint · typecheck · migrate (fill in from the variant README).
+**Commands:** dev · test · lint · typecheck · migrate (the exact commands, one line).
 
 ## Where things are (read on demand, not at boot)
 

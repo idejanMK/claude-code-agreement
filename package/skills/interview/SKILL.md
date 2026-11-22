@@ -21,7 +21,7 @@ understood before any solution is chosen. You write NO code in this skill.
 When shaping a phase — exactly two things, both inside the repo, both committed:
 
 1. **`records/phases/<n>.<k>.md`** — the new phase's file (template:
-   `starter-template-ID/templates/records/records/phases/1.1.md`; grammar `~/.claude/rules/records.md`):
+   `~/.claude/templates/records/records/phases/1.1.md`; grammar `~/.claude/rules/records.md`):
    Status `proposed`, small tasks, each with a **Verify** field in plain behaviour terms the user has
    approved. PLAN.md's "Next proposed" line points at it.
 2. **ROADMAP.md** — one `#### D<n>` entry per decision made here, and the phase row under its milestone.

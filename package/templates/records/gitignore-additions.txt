@@ -1,0 +1,2 @@
+# Append to the project's .gitignore. HANDOFF.md is session state, written by a hook.
+HANDOFF.md

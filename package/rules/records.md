@@ -9,7 +9,7 @@ paths:
 
 # Records — the grammar (loads when a record is touched)
 
-Master templates: `D:\Code\My-projects\starter-template-ID\templates\records\`. Lint:
+Master templates: `~/.claude/templates/records/`. Lint:
 `node ~/.claude/hooks/records-lint.js [project root]` (also runs after every edit to a record and
 reports what is off). The board hook reads the open phase file through PLAN's "Phase file" line.
 

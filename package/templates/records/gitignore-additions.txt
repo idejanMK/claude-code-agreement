@@ -1,0 +1,6 @@
+# Added by /new-project. HANDOFF.md is session state written by a hook; .scratch/ holds test
+# output (screenshots, traces, logs) until /close-phase empties it; the HTML is rendered from
+# project-accounting.json on every stop.
+HANDOFF.md
+.scratch/
+project-accounting.html

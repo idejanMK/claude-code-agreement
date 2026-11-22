@@ -1,0 +1,138 @@
+{
+  "env": {
+    "CLAUDE_CONTEXT_HANDOFF_THRESHOLD": "0.35"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"{{CONFIG_DIR}}/hooks/statusline.sh\""
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/boot-brief.js\"",
+            "shell": "bash",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" prompt",
+            "shell": "bash",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/cold-resume-gate.js\"",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Bash|PowerShell|Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" pre",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" post",
+            "shell": "bash",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/records-lint.js\" --hook",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/context-handoff-stop.js\"",
+            "shell": "bash",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-cost-stop.js\"; node \"{{CONFIG_DIR}}/hooks/cost-html.js\"",
+            "shell": "bash",
+            "timeout": 20
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" stop",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/turn-footer.js\"",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" end",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "records-mods": {
+      "source": {
+        "source": "directory",
+        "path": "{{CONFIG_DIR}}/mods/records"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "records@records-mods": true
+  }
+}

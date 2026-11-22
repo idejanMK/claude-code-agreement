@@ -1,0 +1,58 @@
+{
+  "note": "Estimated cost at Anthropic API list price, per session (main + subagents). Machine-written by ~/.claude/hooks/session-cost-stop.js; do not hand-edit. Shape and upkeep: ~/.claude/rules/records.md.",
+  "sessions": [
+    {
+      "session_id": "45ed29ee-f1fd-4522-8f91-8a1cf5bd763f",
+      "active_hours": 1.7,
+      "date": "2026-11-22",
+      "started": "2026-11-22T09:57:31.695Z",
+      "last_activity": "2026-11-22T16:35:11.688Z",
+      "branches": [
+        "master",
+        "feature/1.1-package"
+      ],
+      "turns": 85,
+      "subagent_transcripts": 4,
+      "tokens_total": 11144787,
+      "est_usd": 15.29,
+      "est_usd_main": 14.75,
+      "est_usd_subagents": 0.54,
+      "unpriced_models": [],
+      "models": {
+        "claude-opus-5-5": {
+          "turns": 22,
+          "input": 52,
+          "cache_write": 173157,
+          "cache_read": 2009275,
+          "output": 42962,
+          "est_usd": 2.65
+        },
+        "claude-fable-5-1": {
+          "turns": 45,
+          "input": 1262,
+          "cache_write": 247233,
+          "cache_read": 7799510,
+          "output": 103992,
+          "est_usd": 12.11
+        },
+        "claude-sonnet-5-5": {
+          "turns": 14,
+          "input": 28,
+          "cache_write": 85119,
+          "cache_read": 238641,
+          "output": 27789,
+          "est_usd": 0.51
+        },
+        "claude-haiku-5-5": {
+          "turns": 4,
+          "input": 10,
+          "cache_write": 134696,
+          "cache_read": 266836,
+          "output": 14225,
+          "est_usd": 0.03
+        }
+      }
+    }
+  ],
+  "total_est_usd": 15.29
+}

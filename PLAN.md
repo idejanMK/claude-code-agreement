@@ -6,8 +6,8 @@ lives in the phase file. The boot brief prints "At a glance" at every session st
 ## At a glance
 
 - **Branch:** `feature/1.1-package`, clean
-- **Now:** 1.1 open — first task 1.1.1
-- **Your turn:** —
+- **Now:** 1.1 open — 11 of 12 tasks verified; 1.1.12 built, one line is yours
+- **Your turn:** [1.1.12](records/phases/1.1.md) (1): hear the beeps, see the board update, say so
 - **Blocked on:** —
 
 ## Open phase

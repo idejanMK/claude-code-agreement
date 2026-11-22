@@ -1,4 +1,5 @@
 {
+  "note": "Estimated cost at Anthropic API list price, per session (main + subagents). Machine-written by ~/.claude/hooks/session-cost-stop.js; do not hand-edit. Shape and upkeep: ~/.claude/rules/records.md.",
   "sessions": [],
   "total_est_usd": 0
 }

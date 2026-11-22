@@ -1,6 +1,6 @@
 # PLAN — {{PROJECT_NAME}}
 
-<!-- A dashboard, not a log: at most 30 lines, these three headings and nothing else. Task text
+<!-- Shape and upkeep: ~/.claude/rules/records.md → PLAN.md. A dashboard, not a log: at most 30 lines, these
 lives in the phase file. The boot brief prints "At a glance" at every session start. -->
 
 ## At a glance

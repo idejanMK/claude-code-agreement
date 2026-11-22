@@ -8,7 +8,7 @@ install is exact.
 
 **Stack:** Markdown, Node ≥ 18 (hooks, setup script, lint), bash (hooks run under it). No dependencies.
 
-**Commands:** test `node --test tests/` · lint `node package/hooks/records-lint.js .` · install check
+**Commands:** test `node --test "tests/*.test.js"` · lint `node package/hooks/records-lint.js .` · install check
 `node .claude/skills/agreement-setup/setup.js check` · setup `/agreement-setup`.
 
 ## Where things are (read on demand, not at boot)

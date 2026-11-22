@@ -1,6 +1,6 @@
 # ROADMAP — {{PROJECT_NAME}}
 
-Cold record: milestones, phases, decisions, backlog, gotchas. Append-only; every list newest first.
+Cold record. Shape and upkeep: `~/.claude/rules/records.md` → ROADMAP.md. Append-only; every list newest first.
 Grammar: `~/.claude/rules/records.md`. Hot state: `PLAN.md`. The open phase: `records/phases/`.
 
 ## Milestones

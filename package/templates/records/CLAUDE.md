@@ -1,5 +1,7 @@
 # {{PROJECT_NAME}}
 
+<!-- Project facts only, under 40 lines (agreement: "A project CLAUDE.md holds project facts only"). -->
+
 **Profile:** FULL | LIGHT — trigger: … (FULL if any of: money/ledger logic, more than one tenant on
 one database, planned life over a month).
 

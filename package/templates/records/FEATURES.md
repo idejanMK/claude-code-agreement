@@ -1,12 +1,6 @@
 # FEATURES — {{PROJECT_NAME}}
 
-One plain line per agreed behaviour. Append-only. `✗` = dropped, with reason.
+Shape and upkeep: `~/.claude/rules/records.md` → FEATURES.md. One plain line per verified behaviour,
+`- F<n> …`, next free number, appended by `/close-phase` only; dropped: `- F<n> ✗ reason`.
 
-## From the starter (variant {{VARIANT}})
-
-- Register, log in, reach a protected page, sign out.
-- One database model with a migration; tests, lint, typecheck green.
-
-## Phase 0
-
-(verify lines are promoted here at closure)
+(empty — lines are promoted here when a phase closes)

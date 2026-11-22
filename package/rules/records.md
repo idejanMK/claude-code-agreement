@@ -3,15 +3,17 @@ paths:
   - "PLAN.md"
   - "ROADMAP.md"
   - "NOTES.md"
-  - "records/**"
   - "FEATURES.md"
+  - "records/**"
+  - "demos/**"
+  - "project-accounting.json"
 ---
 
 # Records — the grammar (loads when a record is touched)
 
 Master templates: `~/.claude/templates/records/`. Lint:
 `node ~/.claude/hooks/records-lint.js [project root]` (also runs after every edit to a record and
-reports what is off). The board hook reads the open phase file through PLAN's "Phase file" line.
+reports what is off). Every record file below says **who keeps it, when**; nothing else writes it.
 
 ## IDs and the six rules
 
@@ -41,6 +43,8 @@ reports what is off). The board hook reads the open phase file through PLAN's "P
 `## At a glance` (four bullets: **Branch**, **Now**, **Your turn**, **Blocked on**; overwritten, never a
 log) · `## Open phase` (`- **Phase file:** [<id> — <title>](records/phases/<id>.md)` or `none`, plus
 the next proposed phase and the previous closed one as links). Nothing else.
+*Kept by:* the orchestrator — At a glance after every task status change; Open phase by `/interview`,
+`/open-phase` and `/close-phase`. The boot brief prints it; the user never edits it.
 
 **records/phases/<n>.<k>.md — the phase.** `# <n>.<k> — <title>` · header bullets **Milestone**,
 **Status**, **Branch**, **Gate 1** (verify lines approved <date> by <who>, or `awaiting`) · `## Why` ·
@@ -54,6 +58,8 @@ reason) · **Why** (≤ 2 lines) · **Scope** · **Verify** (numbered lines + `A
 **Your part** (the user's steps, or `—`) · **Evidence** (per verify line: met / not met, who, how; later
 runs as dated sub-bullets) · **Keepers** · **Deps**. No other field names. Anything longer goes to the
 commit message or to ROADMAP.
+*Kept by:* `/interview` creates it; the orchestrator updates a task's Status and Evidence as each task
+is built and verified, in the same commit as the work; `/close-phase` fills Closure and freezes it.
 
 **ROADMAP.md — cold, append-only, newest first in every list.** `## Milestones` (table: ID · Name ·
 Status) · one `## M<n> — <name>` per milestone (a goal paragraph, then a phase table: Phase · Name ·
@@ -61,23 +67,56 @@ Status · File) · `## Decisions` (`### Index by topic`, then `### Log (newest f
 `#### D<n> — <title>` and a dated paragraph) · `## Backlog` (`- B<n> (date) text`; built or dropped
 items keep their line with `→ <id>` or `✗ reason`) · `## Gotchas` (`### <topic>`, one bullet each).
 A migrated project adds `## Legacy` pointing at `records/legacy-roadmap.md`, which is never edited.
+*Kept by:* the orchestrator — a `D<n>` the moment a decision is made (gate 3 answers, corrected
+premises, dropped behaviours), a `B<n>` when something is parked, a Gotcha at closure; phase rows by
+`/interview`, `/open-phase`, `/close-phase`.
 
 **NOTES.md — the only inbox.** `- N<n> (YYYY-MM-DD) <text> [by Notetaker]`, next free number, appended.
 `/triage` moves each line to `records/notes-log.md` as `- N<n> (date) <text> → <outcome>` where the
 outcome is a task ID, `B<n>`, `D<n>`, `? <question for the user>` (the note stays in NOTES until
 answered) or `✗ <reason>`. The boot brief shows the untriaged count; untriaged notes are the
 orchestrator's debt, not the user's.
+*Kept by:* `/note` appends; `/triage` empties it, at the latest before a phase closes. The user may
+type a line by hand in the same shape.
 
-**FEATURES.md (FULL only).** `- F<n> <one plain line per verified behaviour>`; dropped: `- F<n> ✗ reason`.
-Lines are promoted at closure from the phase file's verified lines, never earlier.
+**records/notes-log.md — every triaged note**, newest first, one line each, in the `/triage` shape
+above. *Kept by:* `/triage` only. Never edited afterwards.
+
+**FEATURES.md (FULL only).** `# FEATURES — <project>`, then `- F<n> <one plain line per verified
+behaviour>`; dropped: `- F<n> ✗ reason`. Append-only, next free number.
+*Kept by:* `/close-phase` promotes the phase's verified lines and the deliberately-out lines, never
+earlier. `/interview` reads it back to the user for "what must not break".
+
+**demos/<n>.<k>-demo.md (FULL only) — the walk the user takes to accept a phase.** `# <n>.<k> — demo`
+· one numbered step per verify line nobody has walked yet: what to do, what you should see, and a
+link to the evidence (a screenshot or file under `demos/<n>.<k>/`). Nothing a script could check.
+*Kept by:* `/close-phase` writes it once, commits it and sends it to the user; it is never updated
+after the phase closes. Evidence files are moved in from `.scratch/` at the same time.
+
+**project-accounting.json — the cost ledger (opt-in).** `{ "note", "sessions": [<one row per
+session>], "total_est_usd" }`; a row has `session_id`, `date`, `active_hours`, `branches`, `turns`,
+`tokens_total`, `est_usd`, per-model counts — and never a local path. Present in the project root =
+accounting on; absent = off. Committed with the project.
+*Kept by:* the Stop hook (`session-cost-stop.js`) only, after every reply. Nobody edits a figure by
+hand; a wrong total is rebuilt with `node ~/.claude/hooks/session-cost-stop.js --backfill` from the
+transcripts. `/close-phase` reads it to sum the phase's cost. `cost-html.js` renders it to
+`project-accounting.html` beside it.
+
+**.scratch/ — not a record.** Test output (screenshots, traces, logs) lands here and nowhere else;
+ignored by git. A file worth keeping moves to `demos/<n>.<k>/` and gets linked. `/close-phase` empties
+it. The boot brief shows its size when it holds anything.
 
 ## Procedures (skills; they load when they run)
 
+- `/new-project` scaffolds these files from the templates (fresh folder, or `adopt` into an existing
+  repo: adds only what is missing), then starts `/interview`.
 - `/interview` shapes a phase: creates `records/phases/<id>.md` with Status `proposed`, tasks with
-  draft Verify fields, and a ROADMAP phase row. No code until gate 1.
+  draft Verify fields, and a ROADMAP phase row (and the milestone, when ROADMAP has none). No code
+  until gate 1.
 - `/open-phase <id>`: gate 1 is on record → Status `open since <date>`, branch
   `feature/<id>-<slug>`, PLAN's Open phase and At a glance, ROADMAP row, one `docs(<id>): open` commit, push.
 - `/close-phase`: gate 2 on record for every verify line, the full gate run once → Closure section
-  (lines, gate, cost, retro), keepers to Gotchas, FEATURES lines (FULL), ROADMAP row closed, PLAN
-  reseeded, one `docs(<id>): close` commit; then propose the `--no-ff` merge.
+  (lines, gate, cost, retro), keepers to Gotchas, FEATURES lines and the demo (FULL), ROADMAP row
+  closed, PLAN reseeded, `.scratch/` emptied, one `docs(<id>): close` commit; then propose the
+  `--no-ff` merge.
 - `/triage`: empties NOTES.md into tasks, backlog, decisions or user questions, one commit.

@@ -1,3 +1,3 @@
 # Notes log — {{PROJECT_NAME}}
 
-Every triaged note, newest first: `- N<n> (date) text → outcome` or `- N<n> (date) text ✗ reason`.
+Shape and upkeep: `~/.claude/rules/records.md` → notes-log. Every triaged note, newest first: `- N<n> (date) text → outcome` or `✗ reason`.

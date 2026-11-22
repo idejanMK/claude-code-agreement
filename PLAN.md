@@ -5,13 +5,13 @@ lives in the phase file. The boot brief prints "At a glance" at every session st
 
 ## At a glance
 
-- **Branch:** `master` (becomes `main` in 1.1.1)
-- **Now:** no phase open — 1.1 is proposed, awaiting gate 1
-- **Your turn:** none — `/open-phase 1.1` is next
+- **Branch:** `feature/1.1-package`, clean
+- **Now:** 1.1 open — first task 1.1.1
+- **Your turn:** —
 - **Blocked on:** —
 
 ## Open phase
 
-- **Phase file:** none
-- **Next proposed:** [1.1 — Installable package](records/phases/1.1.md)
+- **Phase file:** [1.1 — Installable package](records/phases/1.1.md)
+- **Next proposed:** —
 - **Previous closed:** —

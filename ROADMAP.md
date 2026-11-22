@@ -17,7 +17,7 @@ and can check that the install is exact.
 
 | Phase | Name | Status | File |
 |---|---|---|---|
-| 1.1 | Installable package | proposed | [1.1](records/phases/1.1.md) |
+| 1.1 | Installable package | open 2026-11-22 | [1.1](records/phases/1.1.md) |
 
 ## Decisions
 

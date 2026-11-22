@@ -1,0 +1,11 @@
+{
+  "files": [
+    { "from": "agreement.md", "to": "CLAUDE.md" },
+    { "from": "agents", "to": "agents" },
+    { "from": "hooks", "to": "hooks" },
+    { "from": "rules", "to": "rules" },
+    { "from": "skills", "to": "skills" },
+    { "from": "mods", "to": "mods" },
+    { "from": "templates", "to": "templates" }
+  ]
+}

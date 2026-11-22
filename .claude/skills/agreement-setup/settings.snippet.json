@@ -2,55 +2,17 @@
   "env": {
     "CLAUDE_CONTEXT_HANDOFF_THRESHOLD": "0.5"
   },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"{{CONFIG_DIR}}/hooks/statusline.sh\""
+  },
   "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/.claude/hooks/context-handoff-stop.js\"",
-            "shell": "bash",
-            "timeout": 15
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/.claude/hooks/session-cost-stop.js\"",
-            "shell": "bash",
-            "timeout": 20
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/.claude/hooks/session-guard.js\" stop",
-            "shell": "bash",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/.claude/hooks/turn-footer.js\"",
-            "shell": "bash",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/boot-brief.js\"",
+            "command": "node \"{{CONFIG_DIR}}/hooks/boot-brief.js\"",
             "shell": "bash",
             "timeout": 15
           }
@@ -62,13 +24,13 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/session-guard.js\" prompt",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" prompt",
             "shell": "bash",
             "timeout": 10
           },
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/cold-resume-gate.js\"",
+            "command": "node \"{{CONFIG_DIR}}/hooks/cold-resume-gate.js\"",
             "shell": "bash",
             "timeout": 10
           }
@@ -81,7 +43,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/session-guard.js\" pre",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" pre",
             "shell": "bash",
             "timeout": 10
           }
@@ -94,13 +56,55 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/session-guard.js\" post",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" post",
             "shell": "bash",
             "timeout": 10
           },
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/records-lint.js\" --hook",
+            "command": "node \"{{CONFIG_DIR}}/hooks/records-lint.js\" --hook",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/context-handoff-stop.js\"",
+            "shell": "bash",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-cost-stop.js\"; node \"{{CONFIG_DIR}}/hooks/cost-html.js\"",
+            "shell": "bash",
+            "timeout": 20
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" stop",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/turn-footer.js\"",
             "shell": "bash",
             "timeout": 10
           }
@@ -112,7 +116,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/session-guard.js\" end",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-guard.js\" end",
             "shell": "bash",
             "timeout": 10
           }
@@ -120,8 +124,15 @@
       }
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bash \"$HOME/.claude/hooks/statusline.sh\""
+  "extraKnownMarketplaces": {
+    "records-mods": {
+      "source": {
+        "source": "directory",
+        "path": "{{CONFIG_DIR}}/mods/records"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "records@records-mods": true
   }
 }

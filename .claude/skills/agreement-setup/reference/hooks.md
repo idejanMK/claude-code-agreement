@@ -11,7 +11,7 @@ a hook error never blocks a session. Paths in the wiring are absolute to the con
 | PreToolUse | `session-guard.js pre` | Blocks edits and git writes in read-only or talk mode, and in a checkout another session is working in. |
 | PostToolUse | `session-guard.js post` | Bookkeeping after an edit. |
 | PostToolUse | `records-lint.js --hook` | Lints a record file after every edit to it; reports what is off. |
-| Stop | `context-handoff-stop.js` | At `CLAUDE_CONTEXT_HANDOFF_THRESHOLD` (default 0.5 of the context) asks Claude to write HANDOFF.md and recommend a fresh session; escalates with growth. `CLAUDE_CONTEXT_HANDOFF_DISABLED=1`. |
+| Stop | `context-handoff-stop.js` | At `CLAUDE_CONTEXT_HANDOFF_THRESHOLD` (default 0.35 of the context) asks Claude to write HANDOFF.md and recommend a fresh session; escalates with growth. `CLAUDE_CONTEXT_HANDOFF_DISABLED=1`. |
 | Stop | `session-cost-stop.js; cost-html.js` | Writes the session's cost row into `project-accounting.json` when the project opted in, then renders `project-accounting.html`. See `accounting.md`. |
 | Stop | `session-guard.js stop` | Session registry upkeep. |
 | Stop | `turn-footer.js` | One footer line under each reply (branch, changes, unpushed, mode, cache state and the price of resuming). No model call. |

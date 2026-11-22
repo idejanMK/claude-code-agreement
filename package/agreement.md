@@ -51,6 +51,8 @@ updated → atomic commit → push → next. At closure: full gate → gate 2 �
 - **Verify against reality.** A green suite is not proof the product works. I restart the server
   and drive the real user-facing flow in the headless browser. "Done" means verified, once, by one
   of us, and points at evidence from this session.
+- **Test output goes to `.scratch/`** (screenshots, traces, logs; ignored by git), nowhere else. A
+  file worth keeping moves to `demos/<phase>/` and gets linked; `/close-phase` empties the rest.
 - **Progress markers:** `✅ 1.2.3: <name> — done` · `🏁 1.2: <name> — closed`.
 
 ## Testing — it earns its place or it does not exist
@@ -93,10 +95,13 @@ hand. At closure I sum the phase branch rows into "cost: ~$X (N sessions)".
   push main immediately; delete the branch. **Tag deploys, not merges** (`v0.x.y`); push tags.
 - `--force-with-lease` only, on my own branch.
 
-## This config is a repo
-`~/.claude` is a local git repo (no remote; `.gitignore` is an allowlist — add new config by
-un-ignoring it, never by loosening `*`). Every edit I make there gets a conventional commit in the
-same session; process changes also go to the public mirror `github.com/idejanMK/claude-code-agreement`.
+## This agreement is a package
+The agreement, hooks, agents, rules, skills, mod and record templates are one package, installed
+into `~/.claude` by `/agreement-setup` from its repo. A change to any of them is made in that repo,
+on a branch, merged, then installed; never edited live in `~/.claude`. `/agreement-setup check` shows
+drift. `~/.claude` may also be a local git repo for personal config (no remote; an allowlist
+`.gitignore`: add config by un-ignoring it, never by loosening `*`); every edit there gets a
+conventional commit in the same session.
 
 ## These rules are working when
 Diffs carry nothing unrequested; questions arrive before implementation; every "done" points at

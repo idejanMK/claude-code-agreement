@@ -1,6 +1,6 @@
 {
   "env": {
-    "CLAUDE_CONTEXT_HANDOFF_THRESHOLD": "0.5"
+    "CLAUDE_CONTEXT_HANDOFF_THRESHOLD": "0.35"
   },
   "statusLine": {
     "type": "command",

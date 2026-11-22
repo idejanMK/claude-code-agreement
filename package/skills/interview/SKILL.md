@@ -37,6 +37,11 @@ goes in PLAN, ROADMAP or FEATURES — nowhere else.
 The boot brief already holds git log, git status and PLAN's At a glance. Read the open or proposed
 phase file, ROADMAP's decision log and backlog, and `FEATURES.md` where it exists.
 
+**Green field.** When ROADMAP has no milestone yet (the project was just scaffolded by
+`/new-project`), read `records/spec/` and the README instead — that is the user's spec. Your first
+output after Rule 1 is then the milestone list you read out of it: `M1`, `M2`… one line each, what is
+true for the user when each is done. The user corrects it. Only then shape `1.1`.
+
 **Never ask what these already answer.** If a decision is settled, say
 `Settled by D<n> — not reopening` and move on. If PLAN disagrees with git, trust git and
 say so. A question the docs already answer costs the user trust and tells them you did not
@@ -298,7 +303,9 @@ Now, and only now, write to the repo.
 
 **ROADMAP.md** — append to the decision log, one entry per decision actually made here:
 the chosen approach, every corrected premise, every Q6 exclusion. Keep the project's
-existing D-numbering and format. Add the phase row.
+existing D-numbering and format. Add the phase row. Green field: first add the milestones to the
+`## Milestones` table (M1 `open`, the rest `later`) and a `## M<n> — <name>` section with its goal
+paragraph for each; the phase row goes under M1.
 
 **The phase file** — create `records/phases/<n>.<k>.md` from the template with the next free phase
 number under its milestone, Status `proposed`, Gate 1 `awaiting`. Each task: small, independently

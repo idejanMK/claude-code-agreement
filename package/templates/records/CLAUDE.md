@@ -2,10 +2,10 @@
 
 <!-- Project facts only, under 40 lines (agreement: "A project CLAUDE.md holds project facts only"). -->
 
-**Profile:** FULL | LIGHT — trigger: … (FULL if any of: money/ledger logic, more than one tenant on
-one database, planned life over a month).
+**Profile:** {{PROFILE}} — trigger: {{PROFILE_TRIGGER}} (FULL if any of: money/ledger logic, more
+than one tenant on one database, planned life over a month).
 
-**What:** one sentence: what this product does and for whom.
+**What:** {{WHAT}}
 
 **Stack:** one line: languages, framework, database, hosting.
 
@@ -15,6 +15,7 @@ one database, planned life over a month).
 
 | Need | Read |
 |---|---|
+| the spec, as the user gave it | `records/spec/` (read, never edited) |
 | the open phase, its tasks and verify lines | the file PLAN.md's "Phase file" line names |
 | what is next, whose turn it is | PLAN.md (the boot brief already shows it) |
 | why we decided something | ROADMAP.md → Decisions |

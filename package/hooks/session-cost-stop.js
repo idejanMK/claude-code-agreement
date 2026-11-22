@@ -161,7 +161,9 @@ function upsert(ledgerPath, row) {
   }
   if (!Array.isArray(ledger.sessions)) ledger.sessions = [];
   ledger.note ||=
-    "Estimated cost at Anthropic API list price, per session (main + subagents). Machine-written by ~/.claude/hooks/session-cost-stop.js; do not hand-edit.";
+    "Estimated cost at Anthropic API list price, per session (main + subagents). Machine-written by ~/.claude/hooks/session-cost-stop.js; do not hand-edit. Shape and upkeep: ~/.claude/rules/records.md.";
+  // The ledger is committed, often to a public repo: never record the local folder path.
+  delete row.cwd;
   const i = ledger.sessions.findIndex((s) => s.session_id === row.session_id);
   if (i >= 0) row = { ...ledger.sessions[i], ...row };
   else ledger.sessions.push(row);

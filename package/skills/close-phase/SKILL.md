@@ -15,7 +15,8 @@ the one being closed.
    the steps; the skill stops there.
 2. The full gate (lint + typecheck + whole suite, the project's own command) has run once in this
    session, green, after the last code change. Not per task, not twice.
-3. FULL profile: `demos/<id>-demo.md` exists and is committed.
+3. FULL profile: `demos/<id>-demo.md` exists and is committed; every evidence file it links lives
+   under `demos/<id>/` (moved there from `.scratch/`), not in `.scratch/`.
 4. Cost: sum the rows in `project-accounting.json` whose `branches` include the phase branch →
    `~$X (N sessions)`. Never a hand-written figure; if the file is absent, write `not tracked`.
 
@@ -31,6 +32,8 @@ the one being closed.
 5. PLAN.md: Open phase → `none`, previous phase → this file; At a glance → Now: `<id> closed; next:
    <the next proposed phase or "pick one">`, Your turn: the merge.
 6. `node ~/.claude/hooks/records-lint.js` must pass.
+6b. Housekeeping: anything still in `.scratch/` is deleted (`rm -rf .scratch/*`); what a demo or
+   phase file links was moved out in gate 3. Say what was removed in one line.
 7. One commit `docs(<id>): close phase — <title> (cost ~$X, N sessions)`; push the branch.
 8. Propose, do not run: `git checkout main && git merge --no-ff <branch> && git push && git branch -d
    <branch>` (rebase first if main moved; CI green where CI exists).

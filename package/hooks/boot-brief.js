@@ -81,6 +81,15 @@ if (inbox) {
   );
 }
 
+// Housekeeping: .scratch/ holds test output until /close-phase empties it; show its size.
+try {
+  const scratch = path.join(root, ".scratch");
+  let files = 0, bytes = 0;
+  const walk = (d) => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, e.name); if (e.isDirectory()) walk(p); else { files++; bytes += fs.statSync(p).size; } } };
+  walk(scratch);
+  if (files) section(".scratch/ (test output; /close-phase empties it)", `${files} files, ${(bytes / 1048576).toFixed(1)} MB`);
+} catch {}
+
 const handoffPath = path.join(root, "HANDOFF.md");
 try {
   const lastCommit = Number(git("log", "-1", "--format=%ct") || 0) * 1000;

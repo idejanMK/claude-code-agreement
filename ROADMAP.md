@@ -7,7 +7,7 @@ Grammar: `~/.claude/rules/records.md`. Hot state: `PLAN.md`. The open phase: `re
 
 | ID | Name | Status |
 |---|---|---|
-| M1 | Installable package | open |
+| M1 | Installable package | closed 2026-11-22 |
 
 ## M1 — Installable package
 
@@ -17,7 +17,7 @@ and can check that the install is exact.
 
 | Phase | Name | Status | File |
 |---|---|---|---|
-| 1.1 | Installable package | open 2026-11-22 | [1.1](records/phases/1.1.md) |
+| 1.1 | Installable package | closed 2026-11-22 · ~$15.29 (1 session) | [1.1](records/phases/1.1.md) |
 
 ## Decisions
 
@@ -116,3 +116,15 @@ Later, not scheduled. `- B<n> (date) text`; built → `→ <id>`, dropped → `�
 ### Packaging
 - Content compares must ignore line endings: a Windows clone has CRLF where the repo has LF.
 - A Claude Code plugin cannot ship CLAUDE.md, rules, statusLine, env or settings keys (D2).
+- `setup.js` maps `$HOME/.claude` and `~/.claude` to the config dir only when that dir ends in
+  `/.claude`; under a custom `CLAUDE_CONFIG_DIR` they would be a false "present".
+- The package threshold (0.35) is the value in use, so the owner's install is exact with no kept clash.
+
+### Tooling
+- `node --test tests/` fails on Node 24 (the dir is read as a module); use `node --test "tests/*.test.js"`.
+- Claude Code's safety check refuses `rm -rf` on a variable or glob target: scratch walks use literal
+  paths under the session scratchpad and delete files by name.
+- A `Write` right after a shell edit of the same file is refused ("modified since read"): re-read first,
+  and never let a commit message claim a file the diff does not hold.
+- `/close-phase` order matters: Closure section first, Status `closed` last. The write guard freezes the
+  file the moment Status says closed; set early, it freezes half-written.

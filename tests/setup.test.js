@@ -75,16 +75,17 @@ test("mergeSettings: differing env is a clash, kept; takeOurs sets ours", () => 
   const ex = { env: { CLAUDE_CONTEXT_HANDOFF_THRESHOLD: "0.9" } };
   const r = S.mergeSettings(ex, only("env"), DIR);
   const key = "env.CLAUDE_CONTEXT_HANDOFF_THRESHOLD";
-  assert.deepEqual(r.clashes, [{ key, theirs: "0.9", ours: "0.5" }]);
+  const ours = SNIP.env.CLAUDE_CONTEXT_HANDOFF_THRESHOLD;
+  assert.deepEqual(r.clashes, [{ key, theirs: "0.9", ours }]);
   assert.equal(r.settings.env.CLAUDE_CONTEXT_HANDOFF_THRESHOLD, "0.9");
   const t = S.mergeSettings(ex, only("env"), DIR, { takeOurs: [key] });
-  assert.equal(t.settings.env.CLAUDE_CONTEXT_HANDOFF_THRESHOLD, "0.5");
+  assert.equal(t.settings.env.CLAUDE_CONTEXT_HANDOFF_THRESHOLD, ours);
   assert.ok(t.added.includes(key));
   assert.deepEqual(t.clashes, []);
 });
 
 test("mergeSettings: equal env is present", () => {
-  const r = S.mergeSettings({ env: { CLAUDE_CONTEXT_HANDOFF_THRESHOLD: "0.5" } }, only("env"), DIR);
+  const r = S.mergeSettings({ env: { CLAUDE_CONTEXT_HANDOFF_THRESHOLD: SNIP.env.CLAUDE_CONTEXT_HANDOFF_THRESHOLD } }, only("env"), DIR);
   assert.deepEqual(r.present, ["env.CLAUDE_CONTEXT_HANDOFF_THRESHOLD"]);
 });
 

@@ -22,12 +22,20 @@ and can check that the install is exact.
 ## Decisions
 
 ### Index by topic
-- **Process and scope:** D1, D3, D5, D7
+- **Process and scope:** D1, D3, D5, D7, D13
 - **Install and check:** D2, D4, D6, D8
 - **Records and housekeeping:** D9, D10, D12
 - **Privacy:** D11
 
 ### Log (newest first)
+
+#### D13 — Cold-resume gate: threshold $5, the block reads as two numbered choices
+2026-11-24 — The owner: the gate "blocks new prompts; it should ask and offer a choice". Checked against
+the hooks docs: a UserPromptSubmit hook can only allow or block; no dialog exists at prompt time, and
+the block is the only moment before the re-write is paid for. So the block stays, the message becomes
+the question (1. up arrow + Enter to continue here, 2. `/clear` to start fresh), the original prompt
+is left out of the message, and the default threshold rises from $2 to $5 so it fires on the
+expensive resumes only. Picked by the owner from three options (reword, raise, disable).
 
 #### D12 — Onboarding: new-project scaffolds, interview plans; the spec lives in `records/spec/`
 2026-11-22 — `/new-project` asks for the spec (files, a folder, typed sentences, or nothing), files it

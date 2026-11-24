@@ -68,7 +68,7 @@ Environment variables, set under `env` in `settings.json`:
 |---|---|---|
 | `CLAUDE_CONTEXT_HANDOFF_THRESHOLD` | `0.35` | Context fraction at which the handoff hook asks Claude to write `HANDOFF.md` and recommend a fresh session (the hook's own default is 0.5). |
 | `CLAUDE_CONTEXT_HANDOFF_DISABLED` | unset | `1` turns the handoff hook off. |
-| `CLAUDE_COLD_RESUME_MIN_USD` | `2` | The cold-resume gate speaks up when re-writing an expired cache would cost at least this. |
+| `CLAUDE_COLD_RESUME_MIN_USD` | `5` | The cold-resume gate speaks up when re-writing an expired cache would cost at least this. It blocks the prompt once and offers two numbered choices: recall the prompt and send it again to continue, or `/clear` and start fresh. |
 | `CLAUDE_COLD_RESUME_DISABLED` | unset | `1` turns the gate off. |
 | `CLAUDE_SESSION_COST_DISABLED` | unset | `1` stops cost rows for the session. |
 | `CLAUDE_PLAN_USD_MONTH` | `100` | Plan price `cost-report.js` allocates across projects. |

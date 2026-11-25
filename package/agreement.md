@@ -54,6 +54,9 @@ updated → atomic commit → push → next. At closure: full gate → gate 2 �
 - **Test output goes to `.scratch/`** (screenshots, traces, logs; ignored by git), nowhere else. A
   file worth keeping moves to `demos/<phase>/` and gets linked; `/close-phase` empties the rest.
 - **Progress markers:** `✅ 1.2.3: <name> — done` · `🏁 1.2: <name> — closed`.
+- **Session names:** a session that starts work (`go <id>`, `/open-phase`, `/close-phase`) is named
+  `<ID> <heading>` from the records by a hook; a name you set yourself stays. Question-only sessions
+  keep their generated title.
 
 ## Testing — it earns its place or it does not exist
 A test is written only when it knows something the code does not: (1) pure logic with real

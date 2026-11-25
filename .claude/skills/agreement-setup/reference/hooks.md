@@ -8,6 +8,7 @@ a hook error never blocks a session. Paths in the wiring are absolute to the con
 | SessionStart | `boot-brief.js` | Registers the session, prints the boot brief into context: git log, branch and tree state, unpushed commits, PLAN's "At a glance", HANDOFF.md if newer than the last commit, untriaged notes, other sessions open in this checkout, `.scratch/` size. |
 | UserPromptSubmit | `session-guard.js prompt` | Reads the user's wording for read-only or talk mode. |
 | UserPromptSubmit | `cold-resume-gate.js` | When the prompt cache is cold and the re-write would cost real money, blocks the prompt once with two numbered choices (resend to continue, or `/clear`). `CLAUDE_COLD_RESUME_MIN_USD` (default 5), `CLAUDE_COLD_RESUME_DISABLED=1`. |
+| UserPromptSubmit | `session-title.js` | When a prompt starts work (`go <id>`, `/open-phase <id>`, `/close-phase`), names the session `<ID> <heading>` from the records, as `/rename` would. A name you set yourself is never overwritten; the latest `go` replaces the hook's own earlier name; other sessions keep their generated title. No model call. |
 | PreToolUse | `session-guard.js pre` | Blocks edits and git writes in read-only or talk mode, and in a checkout another session is working in. |
 | PostToolUse | `session-guard.js post` | Bookkeeping after an edit. |
 | PostToolUse | `records-lint.js --hook` | Lints a record file after every edit to it; reports what is off. |

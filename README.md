@@ -20,8 +20,8 @@ else here exists to make it run.
 - **Agents** — `implementer`, `reviewer`, `test-author`, `note-taker`: the briefs Claude delegates
   to.
 - **Hooks** — a boot brief at session start, a context-handoff guard, a session guard (read-only and
-  talk modes, parallel sessions), a cold-resume price check, a one-line footer per reply, a status
-  line, and cost accounting per project. Details:
+  talk modes, parallel sessions), a cold-resume price check, session names from the records, a
+  one-line footer per reply, a status line, and cost accounting per project. Details:
   [`reference/hooks.md`](.claude/skills/agreement-setup/reference/hooks.md).
 - **Cost accounting** — opt-in per project; one row per session, written by a hook, never by hand:
   [`reference/accounting.md`](.claude/skills/agreement-setup/reference/accounting.md).

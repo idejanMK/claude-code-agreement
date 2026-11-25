@@ -33,6 +33,12 @@
             "command": "node \"{{CONFIG_DIR}}/hooks/cold-resume-gate.js\"",
             "shell": "bash",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"{{CONFIG_DIR}}/hooks/session-title.js\"",
+            "shell": "bash",
+            "timeout": 10
           }
         ]
       }

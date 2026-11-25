@@ -52,7 +52,177 @@
           "est_usd": 0.03
         }
       }
+    },
+    {
+      "session_id": "de67679c-dd65-4003-8d81-d35ee5b6b878",
+      "active_hours": 0.45,
+      "date": "2026-11-24",
+      "started": "2026-11-24T23:37:13.357Z",
+      "last_activity": "2026-11-25T00:04:06.693Z",
+      "branches": [
+        "main"
+      ],
+      "turns": 29,
+      "subagent_transcripts": 1,
+      "tokens_total": 2537123,
+      "est_usd": 3.51,
+      "est_usd_main": 3.49,
+      "est_usd_subagents": 0.02,
+      "unpriced_models": [],
+      "models": {
+        "claude-fable-5-1": {
+          "turns": 24,
+          "input": 648,
+          "cache_write": 84238,
+          "cache_read": 2173451,
+          "output": 25168,
+          "est_usd": 3.49
+        },
+        "claude-haiku-5-5": {
+          "turns": 5,
+          "input": 10,
+          "cache_write": 90101,
+          "cache_read": 157555,
+          "output": 5952,
+          "est_usd": 0.02
+        }
+      }
+    },
+    {
+      "session_id": "216da905-618a-481a-ab44-28b4f8c5c4c1",
+      "active_hours": 0.01,
+      "date": "2026-11-24",
+      "started": "2026-11-24T23:52:30.787Z",
+      "last_activity": "2026-11-24T23:53:20.061Z",
+      "branches": [
+        "main"
+      ],
+      "turns": 9,
+      "subagent_transcripts": 0,
+      "tokens_total": 622844,
+      "est_usd": 0.3,
+      "est_usd_main": 0.3,
+      "est_usd_subagents": 0,
+      "unpriced_models": [],
+      "models": {
+        "claude-sonnet-5-5": {
+          "turns": 9,
+          "input": 20,
+          "cache_write": 45685,
+          "cache_read": 571576,
+          "output": 5563,
+          "est_usd": 0.3
+        }
+      }
+    },
+    {
+      "session_id": "c26ef947-92b6-40bd-b0b6-83f357c9a9aa",
+      "active_hours": 0.01,
+      "date": "2026-11-24",
+      "started": "2026-11-24T23:54:30.244Z",
+      "last_activity": "2026-11-24T23:54:49.310Z",
+      "branches": [
+        "main"
+      ],
+      "turns": 5,
+      "subagent_transcripts": 0,
+      "tokens_total": 317089,
+      "est_usd": 0.19,
+      "est_usd_main": 0.19,
+      "est_usd_subagents": 0,
+      "unpriced_models": [],
+      "models": {
+        "claude-sonnet-5-5": {
+          "turns": 5,
+          "input": 12,
+          "cache_write": 35907,
+          "cache_read": 278870,
+          "output": 2300,
+          "est_usd": 0.19
+        }
+      }
+    },
+    {
+      "session_id": "23c8f387-1541-46f6-b820-7187856c21c0",
+      "active_hours": 0,
+      "date": "2026-11-24",
+      "started": "2026-11-24T23:55:38.447Z",
+      "last_activity": "2026-11-24T23:55:38.487Z",
+      "branches": [
+        "main"
+      ],
+      "turns": 1,
+      "subagent_transcripts": 0,
+      "tokens_total": 56628,
+      "est_usd": 0.11,
+      "est_usd_main": 0.11,
+      "est_usd_subagents": 0,
+      "unpriced_models": [],
+      "models": {
+        "claude-sonnet-5-5": {
+          "turns": 1,
+          "input": 2,
+          "cache_write": 25260,
+          "cache_read": 31132,
+          "output": 234,
+          "est_usd": 0.11
+        }
+      }
+    },
+    {
+      "session_id": "b1ddbb7a-96bc-4b03-9293-b854bf50829b",
+      "active_hours": 0,
+      "date": "2026-11-24",
+      "started": "2026-11-24T23:56:16.638Z",
+      "last_activity": "2026-11-24T23:56:29.511Z",
+      "branches": [
+        "main"
+      ],
+      "turns": 3,
+      "subagent_transcripts": 0,
+      "tokens_total": 188933,
+      "est_usd": 0.17,
+      "est_usd_main": 0.17,
+      "est_usd_subagents": 0,
+      "unpriced_models": [],
+      "models": {
+        "claude-sonnet-5-5": {
+          "turns": 3,
+          "input": 6,
+          "cache_write": 34762,
+          "cache_read": 152439,
+          "output": 1726,
+          "est_usd": 0.17
+        }
+      }
+    },
+    {
+      "session_id": "bb6edaec-823f-4d20-af59-4cc5587af87e",
+      "active_hours": 0,
+      "date": "2026-11-25",
+      "started": "2026-11-25T00:00:09.033Z",
+      "last_activity": "2026-11-25T00:00:25.702Z",
+      "branches": [
+        "main"
+      ],
+      "turns": 2,
+      "subagent_transcripts": 0,
+      "tokens_total": 126452,
+      "est_usd": 0.19,
+      "est_usd_main": 0.19,
+      "est_usd_subagents": 0,
+      "unpriced_models": [],
+      "models": {
+        "claude-sonnet-5-5": {
+          "turns": 2,
+          "input": 6,
+          "cache_write": 39483,
+          "cache_read": 84427,
+          "output": 2536,
+          "est_usd": 0.19
+        }
+      }
     }
   ],
-  "total_est_usd": 15.29
+  "total_est_usd": 19.76
 }

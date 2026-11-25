@@ -8,6 +8,7 @@ Grammar: `~/.claude/rules/records.md`. Hot state: `PLAN.md`. The open phase: `re
 | ID | Name | Status |
 |---|---|---|
 | M1 | Installable package | closed 2026-11-22 |
+| M2 | Working in many sessions | open |
 
 ## M1 — Installable package
 
@@ -19,15 +20,32 @@ and can check that the install is exact.
 |---|---|---|---|
 | 1.1 | Installable package | closed 2026-11-22 · ~$15.29 (1 session) | [1.1](records/phases/1.1.md) |
 
+## M2 — Working in many sessions
+
+The owner runs several sessions at once, across projects and from the Remote Control list. Each one says
+what it is working on without being asked: the ID and the heading from the records.
+
+| Phase | Name | Status | File |
+|---|---|---|---|
+| 2.1 | Session naming | open 2026-11-25 | [2.1](records/phases/2.1.md) |
+
 ## Decisions
 
 ### Index by topic
-- **Process and scope:** D1, D3, D5, D7, D13
+- **Process and scope:** D1, D3, D5, D7, D13, D14
 - **Install and check:** D2, D4, D6, D8
 - **Records and housekeeping:** D9, D10, D12
 - **Privacy:** D11
 
 ### Log (newest first)
+
+#### D14 — Sessions that start work are named from the records by a hook
+2026-11-25 — A UserPromptSubmit hook sets the title `<ID> <heading>` when a prompt starts work
+(`go <id>`, `/open-phase`, `/close-phase`). A hook, not the records mod, so naming works with the mod
+off. No project prefix: the owner sees which project a session belongs to anyway (their call). A title
+the owner set by hand is never overwritten; the latest work wins over the hook's own earlier name; a
+session that only asks questions keeps its generated title. Shaped in a session of another project and
+brought here by the owner. Replaces nothing.
 
 #### D13 — Cold-resume gate: threshold $5, the block reads as two numbered choices
 2026-11-24 — The owner: the gate "blocks new prompts; it should ask and offer a choice". Checked against

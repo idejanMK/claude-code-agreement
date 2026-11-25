@@ -40,6 +40,16 @@ test("parseWorkPrompt: go <task id>, any case, surrounding whitespace, trailing 
   assert.equal(parseWorkPrompt("go 2.1.2.1.5"), null); // five segments is not an id
 });
 
+// A bug we hit in the 2.1.2 walk: VS Code puts tag blocks in front of the typed text.
+test("parseWorkPrompt: leading editor-added tag blocks are skipped", () => {
+  const browser = "<browser_instruction># Browser\n\n* use mcp__x__* tools\n</browser_instruction>";
+  const ide = "<ide_opened_file>The user opened a file.</ide_opened_file>\n";
+  assert.deepEqual(parseWorkPrompt(`${browser}go 2.1.3`), { kind: "go", id: "2.1.3" });
+  assert.deepEqual(parseWorkPrompt(`${ide}${browser}\n go 2.1.3`), { kind: "go", id: "2.1.3" });
+  assert.equal(parseWorkPrompt("<ide_selection>go 2.1.3</ide_selection>what is this?"), null);
+  assert.equal(parseWorkPrompt(browser), null);
+});
+
 test("parseWorkPrompt: /open-phase and /close-phase, with and without an id", () => {
   assert.deepEqual(parseWorkPrompt("/open-phase 2.3"), { kind: "open", id: "2.3" });
   assert.deepEqual(parseWorkPrompt("/close-phase 2.1"), { kind: "close", id: "2.1" });

@@ -20,9 +20,11 @@ const os = require("os");
 const ID = String.raw`(\d+\.\d+\.\d+(?:\.\d+)?)`; // task, or subtask
 const PHASE_ID = String.raw`(\d+\.\d+)`;
 const DASH = "[—–-]"; // — – -
+// Editors put tag blocks (<ide_selection>…</ide_selection> and the like) before the typed text.
+const LEADING_BLOCKS = /^(?:\s*<([A-Za-z][\w-]*)(?:\s[^>]*)?>[\s\S]*?<\/\1>)+/;
 
 function parseWorkPrompt(prompt) {
-  const p = String(prompt || "").trim();
+  const p = String(prompt || "").replace(LEADING_BLOCKS, "").trim();
   let m;
   if ((m = p.match(new RegExp(String.raw`^go\s+${ID}(?!\.?\d)`, "i")))) return { kind: "go", id: m[1] };
   if ((m = p.match(new RegExp(String.raw`^/open-phase\s+${PHASE_ID}(?!\.?\d)`, "i")))) return { kind: "open", id: m[1] };
